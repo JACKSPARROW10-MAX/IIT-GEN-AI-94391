@@ -1,0 +1,4 @@
+City: Pune
+Temperature: 21.34 °C
+Humidity: 36 %
+Wind Speed: 3.27 m/s
