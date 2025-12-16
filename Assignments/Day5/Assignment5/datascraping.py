@@ -34,4 +34,21 @@ with open("table_data.csv", "w", newline="", encoding="utf-8") as file:
         writer.writerow(row_data)
 
 print("Table saved to table_data.csv")
+
+table2= wait.until(
+    EC.presence_of_element_located(
+        (By.CLASS_NAME,"table-responsive")
+    )
+)
+
+rows2 = table2.find_elements(By.XPATH, ".//tbody/tr")
+with open("table_data2.csv", "w", newline="", encoding="utf-8") as file2:
+    writer2 = csv.writer(file2)
+
+    for row in rows2:
+        cells2 = row.find_elements(By.TAG_NAME, "td")
+        row_data2 = [cell.get_attribute("textContent").strip() for cell in cells2]
+        writer2.writerow(row_data2)
+print("Table saved to table_data2.csv")
+
 driver.quit()
