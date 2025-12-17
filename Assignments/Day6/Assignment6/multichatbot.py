@@ -82,7 +82,7 @@ elif chatbot_option == "GEMINI CHATBOT":
         })
 
 
-for chat in reversed(st.session_state.chat_history):
+for chat in st.session_state.chat_history:
     if chat["bot"] == chatbot_option:
         st.markdown(
             f"""
