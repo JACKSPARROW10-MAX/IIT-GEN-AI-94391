@@ -5,8 +5,6 @@ import json
 from dotenv import load_dotenv
 
 load_dotenv()
-
-# ---------------- UI (UNCHANGED) ----------------
 st.markdown("<h1 style='color:#37A794'>Multi-ChatbotInterface</h1>", unsafe_allow_html=True)
 st.sidebar.title("Chatbot Selector")
 
@@ -20,11 +18,9 @@ with st.sidebar:
 
 st.write(f"You have selected: {chatbot_option}")
 
-# ---------------- SESSION STATE ----------------
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
-# ---------------- CHATBOT FUNCTIONS ----------------
 def groq_chatbot(user_prompt):
     api_key = os.getenv("GROQ_OPENAI_API")
     url = "https://api.groq.com/openai/v1/chat/completions"
