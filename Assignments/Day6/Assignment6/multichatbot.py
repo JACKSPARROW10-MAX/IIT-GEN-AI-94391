@@ -58,7 +58,7 @@ def gemini_chatbot(gemini_prompt):
     resp = response.json()
     return resp["choices"][0]["message"]["content"]
 
-# ---------------- INPUT HANDLING ----------------
+
 if chatbot_option is None:
     st.warning("Please select a chatbot from the sidebar.")
 elif chatbot_option == "GROQ CHATBOT":
@@ -81,7 +81,7 @@ elif chatbot_option == "GEMINI CHATBOT":
             "response": response
         })
 
-# ---------------- CHAT DISPLAY (UI UNCHANGED) ----------------
+
 for chat in reversed(st.session_state.chat_history):
     if chat["bot"] == chatbot_option:
         st.markdown(
@@ -104,7 +104,7 @@ for chat in reversed(st.session_state.chat_history):
             unsafe_allow_html=True
         )
 
-# ---------------- SIDEBAR STYLE (UNCHANGED) ----------------
+
 def sidebar_style():
     st.markdown(
         """
