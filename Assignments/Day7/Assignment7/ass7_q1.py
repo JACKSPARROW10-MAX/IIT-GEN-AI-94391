@@ -56,7 +56,7 @@ if data_file:
         Instruction:
             Write a SQL query for the above question. 
             Generate SQL query only in plain text format and nothing else.
-            If you cannot generate the query, then output 'Error'.
+            If you cannot generate the query, then output 'Error'. 
     """
         result = llm.invoke(llm_input)
         print(result.content)
