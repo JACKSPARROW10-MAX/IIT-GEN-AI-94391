@@ -14,3 +14,4 @@ if data_file:
     query=f"SELECT * FROM data WHERE empno = '{empid}'"
     result=ps.sqldf(query,{"data":df})
     st.dataframe(result)
+    
