@@ -9,7 +9,7 @@ import streamlit as st
 
 load_dotenv() 
 
-st.markdown("<h1>Weather Agent</h1>",unsafe_allow_html=True)
+st.markdown("<h1>Smart Chatbot</h1>",unsafe_allow_html=True)
 #st.markdown("<h1>CALCULATOR AGENT</h1>",unsafe_allow_html=True)
 city=st.chat_input("You :")
 
@@ -39,16 +39,47 @@ def get_weather(city):
         return json.dumps(weather)
     except:
         return "Error"
+
+@tool
+def read_file(filepath:str)->str:
+    """
+    this agent read the file content and summurize it in simple english
+    
+    :param filepath: Description
+    """
+    with open(filepath, 'r') as file:
+        text = file.read()
+        return text
+
+@tool
+def calculator(expression):
+    """
+    This calculator function solves any arithmetic expression containing all constant values.
+    It supports basic arithmetic operators +, -, *, /, and parenthesis. 
+    
+    :param expression: str input arithmetic expression
+    :returns expression result as str
+    """
+    try:
+        result = eval(expression)
+        return str(result)
+    except:
+        return "Error: Cannot solve expression"
+
     
 agent = create_agent(
             model=llm, 
             tools=[
-                get_weather
+                get_weather,
+                calculator,
+                read_file
             ],
-            system_prompt="You are a helpful assistant. Answer in short."
+            system_prompt="You are a helpful assistant. Answer in short"
+            "use tool calculator only when maths related questions are asked." 
+            "use tool get_weather only when weather related questions are asked" 
+            "use tool read_file only when file path is given" 
+            "dont use tools for genral questions like who,what" 
         )
-
-
 
 user_input = city
 if user_input :
@@ -66,6 +97,6 @@ if user_input :
         if hasattr(msg,"tool_calls") and msg.tool_calls:
             tool_found=True
             for tool in msg.tool_calls :
-                st.write("tool name",tool["name"])
+                st.write("tool name :",tool["name"])
     if not tool_found:
         st.error("No tools are used !") 
