@@ -41,3 +41,6 @@ if city:
                 result = llm.invoke(llm_input)
                 print(result.content)
                 st.success(result.content)
+
+
+
