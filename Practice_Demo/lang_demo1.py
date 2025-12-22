@@ -24,3 +24,4 @@ user_input = input("You: ")
 result = llm.stream(user_input)
 for chunk in result:
     print(chunk.content, end="")
+     
