@@ -8,3 +8,5 @@ package.json
 .venv/
 day5env/
 RESUME
+
+.chroma_db/
