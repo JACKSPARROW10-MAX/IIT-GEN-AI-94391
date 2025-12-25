@@ -6,7 +6,7 @@ from datetime import datetime
 from dotenv import load_dotenv
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_openai import OpenAIEmbeddings, ChatOpenAI
+from langchain_openai import ChatOpenAI
 from langchain_community.vectorstores import Chroma
 import tempfile
 from sentence_transformers import SentenceTransformer
