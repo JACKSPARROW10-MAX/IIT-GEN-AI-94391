@@ -166,3 +166,4 @@ uploaded_file = st.sidebar.file_uploader("Upload PDF Resume", type="pdf")
 if uploaded_file and st.sidebar.button("Upload Resume"):
     upload_resume(uploaded_file)
     st.sidebar.success("Resume uploaded successfully!")
+

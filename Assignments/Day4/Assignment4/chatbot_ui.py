@@ -39,3 +39,4 @@ if user_input:
 
     with st.chat_message("assistant"):
         st.write_stream(stream_reply(bot_reply))
+

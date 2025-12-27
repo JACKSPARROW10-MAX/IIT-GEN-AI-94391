@@ -10,3 +10,4 @@ for num in num_list:
         odd_count+=1
 print("Even numbers count :",even_count)
 print("Odd numbers count :",odd_count)
+

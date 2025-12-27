@@ -4,35 +4,24 @@ import tempfile
 from datetime import datetime
 from dotenv import load_dotenv
 import time
-
 import chromadb
 from langchain_community.vectorstores import Chroma
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_openai import ChatOpenAI
-
-# =====================================================
-# Load environment
-# =====================================================
 load_dotenv()
 CHROMA_API_KEY = os.getenv("CHROMA_API_KEY")
 if not CHROMA_API_KEY:
-    raise RuntimeError("❌ CHROMA_API_KEY not set")
+    raise RuntimeError(" CHROMA_API_KEY not set")
 
 TENANT =os.getenv("TENANT_ID")
 DATABASE = "Chroma_db"
 COLLECTION_NAME = "resumes"
 
-# =====================================================
-# Session state
-# =====================================================
 if "vector_store" not in st.session_state:
     st.session_state.vector_store = None
 
-# =====================================================
-# Initialize vector store (Chroma Cloud)
-# =====================================================
 def initialize_vector_store():
     embeddings = HuggingFaceEmbeddings(
         model_name="sentence-transformers/all-MiniLM-L6-v2"
@@ -50,9 +39,6 @@ def initialize_vector_store():
         embedding_function=embeddings
     )
 
-# =====================================================
-# PDF processing
-# =====================================================
 def process_pdf(uploaded_file):
     with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp:
         tmp.write(uploaded_file.getvalue())
@@ -67,9 +53,6 @@ def process_pdf(uploaded_file):
     )
     return splitter.split_documents(docs)
 
-# =====================================================
-# Upload resume
-# =====================================================
 def upload_resume(uploaded_file, vector_store):
     chunks = process_pdf(uploaded_file)
 
@@ -82,9 +65,6 @@ def upload_resume(uploaded_file, vector_store):
     vector_store.add_documents(chunks)
     return True
 
-# =====================================================
-# List resumes (Cloud-safe)
-# =====================================================
 def list_resumes(vector_store):
     try:
         docs = vector_store.similarity_search(query="resume", k=50)
@@ -98,9 +78,6 @@ def list_resumes(vector_store):
         st.error(f"Error listing resumes: {e}")
         return {}
 
-# =====================================================
-# Delete resume (Cloud-safe)
-# =====================================================
 def delete_resume(filename, vector_store):
     try:
         docs = vector_store.similarity_search(query=filename, k=100)
@@ -113,9 +90,6 @@ def delete_resume(filename, vector_store):
         st.error(f"Delete error: {e}")
         return False
 
-# =====================================================
-# Safe similarity search with retries
-# =====================================================
 def safe_similarity_search(retriever, query, max_retries=3, wait=2):
     for i in range(max_retries):
         try:
@@ -127,13 +101,10 @@ def safe_similarity_search(retriever, query, max_retries=3, wait=2):
                 st.error(f"Error during similarity search: {e}")
                 return []
 
-# =====================================================
-# Shortlist resumes
-# =====================================================
 def shortlist_resumes(job_desc, num_resumes, vector_store):
-    # Safety limits
+  
     MAX_K = min(num_resumes * 3, 20)
-    job_desc_short = job_desc[:1000]  # truncate if too long
+    job_desc_short = job_desc[:1000]  
 
     retriever = vector_store.as_retriever(search_kwargs={"k": MAX_K})
     docs = safe_similarity_search(retriever, job_desc_short)
@@ -143,9 +114,8 @@ def shortlist_resumes(job_desc, num_resumes, vector_store):
         fname = d.metadata.get("filename", "Unknown")
         grouped.setdefault(fname, []).append(d.page_content)
 
-    # LLM integration
     llm = ChatOpenAI(
-        model="gemma-2-9b-it",        # LM Studio local model
+        model="gemma-2-9b-it",       
         base_url="http://localhost:1234/v1",
         api_key="lm-studio",
         timeout=60,
@@ -176,9 +146,6 @@ Explain in 8–12 sentences why this candidate matches the job.
 
     return results
 
-# =====================================================
-# Streamlit UI
-# =====================================================
 def main():
     st.set_page_config("AI Resume Shortlisting", "📄", "wide")
     st.title("📄 AI Resume Shortlisting (Chroma Cloud SAFE)")

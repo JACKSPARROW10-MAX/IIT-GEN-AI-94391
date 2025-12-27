@@ -119,3 +119,4 @@ def sidebar_style():
     )
 
 sidebar_style()
+
