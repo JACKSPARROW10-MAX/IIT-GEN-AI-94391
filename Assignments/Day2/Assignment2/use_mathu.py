@@ -1,4 +1,4 @@
-from math_utils import circle_area, rectangle_area, triangle_area, square_area
+from Assignments.Day2.Assignment2.math_utils import circle_area, rectangle_area, triangle_area, square_area
 
 print("Circle area with radius 10:", circle_area(10))
 print("Rectangle area with length 5 and width 8:", rectangle_area(5, 8))
